@@ -1,29 +1,24 @@
-const slider = document.querySelector('.items');
-    let isDown = false;
-    let startX;
-    let scrollLeft;
+// main.js
+const cubes = document.querySelectorAll('.cube');
+let isDragging = false;
+let startX, currentX;
 
-    slider.addEventListener('mousedown', (event) => {
-        isDown = true;
-        slider.classList.add('active')
-        startX = event.pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;
-    });
-    
-    slider.addEventListener('mouseleave', () => {
-        isDown = false;
-        slider.classList.remove('active')
+cubes.forEach(cube => {
+    cube.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
     });
 
-    slider.addEventListener('mouseup', () => {
-        isDown = false;
-        slider.classList.remove('active')
+    cube.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - startX;
+        // Update cube position (e.g., translateX(deltaX))
+        cube.style.transform = `translateX(${deltaX}px)`;
+        currentX = e.clientX;
     });
 
-    slider.addEventListener('mousemove', (event) => {
-        if (!isDown) return;
-        event.preventDefault();
-        const x = event.pageX - slider.offsetLeft;
-        const walk = (x - startX)*2;
-        slider.scrollLeft = scrollLeft - walk;
+    cube.addEventListener('mouseup', () => {
+        isDragging = false;
+        // Handle any additional logic (e.g., snap to grid, check boundaries)
     });
+});
